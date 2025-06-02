@@ -17,22 +17,19 @@ public class OrderController {
 
     @PostMapping("/order")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateOrder createOrder(Order order){
-        return orderService.createOrder(order);
+    public String createOrder(@RequestBody CreateOrder body) {
+        return orderService.createOrder(body);
     }
 
-    @GetMapping("/order-status/{id}")
-    public OrderInfo getOrderStatus(@PathVariable String id){
-        return  orderService.getOrderStatus(id);
-    }
+//    @GetMapping("/order-status/{id}")
+//    public OrderInfo getOrderStatus(@PathVariable String id){
+//        return  orderService.getOrderStatus(id);
+//    }
 
-    @PutMapping("/order-status")
-    public UpdateOrder updateOrderStatus(String id){
-        return orderService.updateOrderStatus(id);
-    }
-    @PostMapping("/qr-code/{id}")
-   public QrInfo getQrPayment(@PathVariable String id){
-        return orderService.getQrPayment(id);
-    }
+//    @PutMapping("/order-status")
+//    public UpdateOrder updateOrderStatus(String id){
+//        return orderService.updateOrderStatus(id);
+//    }
+
 
 }
