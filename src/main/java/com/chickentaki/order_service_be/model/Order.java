@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import java.util.List;
 
 @Entity
 @Table(name = "orders") // Maps to the 'orders' table
@@ -13,14 +14,14 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.UUID) // Assuming you want DB to generate UUID
     private UUID id;
 
-    @Column(name = "customer_name", nullable = false)
+    @Column(name = "customer_name")
     private String customerName;
 
-    @Column(name = "total_price", nullable = false)
+    @Column(name = "total_price")
     private BigDecimal totalPrice; // Using BigDecimal for NUMERIC(10,2)
 
     @Enumerated(EnumType.STRING) // Tells JPA to store the enum as its String name in the DB
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private OrderStatus status; // Your Java enum for order status
 
     @Column(name = "created_at", nullable = false)
@@ -28,6 +29,10 @@ public class Order {
 
     @Column(name = "updated_at") // Good practice to have updated_at
     private OffsetDateTime updatedAt;
+
+    // One-to-Many mapping with OrderItem
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> items;
 
     // --- Constructors ---
     // JPA requires a no-argument constructor
@@ -58,6 +63,9 @@ public class Order {
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public List<OrderItem> getItems() { return items; }
+    public void setItems(List<OrderItem> items) { this.items = items; }
 
     @PrePersist // JPA lifecycle callback: sets createdAt and updatedAt before persisting
     protected void onCreate() {
